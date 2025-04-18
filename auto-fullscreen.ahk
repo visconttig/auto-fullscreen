@@ -25,6 +25,7 @@ tolerance = 0    ; Mouse distance to ignore in full screen
 
 Loop {
     WinWaitActive, ahk_group programs
+    WinMaximize, A ; <-- Maximized by default (needed for certain programs like VSCode)
     SoundBeep, 1500
     SetTimer, Check, 350
     WinWaitNotActive
