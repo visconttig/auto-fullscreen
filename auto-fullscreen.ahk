@@ -48,16 +48,16 @@ inMargin := y < margin || y > A_ScreenHeight - margin
 ; If we're inside the specified boundaries
 ; disable **entry** into fullscreen — but still allow **exit**
 if (!full && inMargin) {
-    Tooltip, "In margin — blocking fullscreen"
+;    Tooltip, "In margin — blocking fullscreen"
     return
 } 
 if (!full && !inMargin && A_TimeIdleMouse > idle) {
-    Tooltip, "Entering fullscreen"
+ ;   Tooltip, "Entering fullscreen"
     Send, {F11}
     return
 }
 if (full && inMargin && moved) {
-    Tooltip, "Exiting fullscreen"
+;    Tooltip, "Exiting fullscreen"
     Send, {F11}
     return
 }
