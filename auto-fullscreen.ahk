@@ -23,9 +23,47 @@ margin    = 145   ; Screen boundaries for exiting full screen
 tolerance = 0    ; Mouse distance to ignore in full screen
 
 
+;-----------------------------------------------
+; Returns true if the active window is "snapped"
+; left or right (half‑screen) on its monitor.
+;-----------------------------------------------
+IsSnapped() {
+    ; Get window rect
+    WinGetPos, WX, WY, WW, WH, A
+    
+    ; Find which monitor it lives on
+    hMon :=  DllCall("MonitorFromPoint", "int", WX, "int", WY, "uint", 2, "Ptr")
+    
+    ; Prepare monitor-info structure (cbSize = 40 bytes)
+    VarSetCapacity(mi, 40, 0)
+    NumPut(40, mi, 0, "UInt")
+    DllCall("GetMonitorInfo", "uint", hMon, "uint", &mi)
+    
+    workLeft   := NumGet(mi,  8, "Int")
+    workTop    := NumGet(mi, 12, "Int")
+    workRight  := NumGet(mi, 16, "Int")
+    workBottom := NumGet(mi, 20, "Int")
+    workW      := workRight - workLeft
+    
+    ; Calculate half‑width (integer)
+    halfW := workW // 2
+    
+    ; Check for exact half‑width + flush to left/right
+    if (WW = halfW) {
+        if (WX = workLeft || WX = workLeft + halfW)
+            return true
+    }
+    return false
+}
+
+
 Loop {
     WinWaitActive, ahk_group programs
-    WinMaximize, A ; <-- Maximized by default (needed for certain programs like VSCode)
+
+    if(!IsSnapped()){ ; Only maximize if _not_ snapped / half-screen
+        WinMaximize, A ; <-- Maximized by default (needed for certain programs like VSCode)
+    }
+
     SoundBeep, 1500
     SetTimer, Check, 350
     WinWaitNotActive
@@ -34,6 +72,9 @@ Loop {
 }
 
 Check:
+if(isSnapped()){
+    return ; skip full-screen logic when snapped
+}
 CoordMode, Mouse
 lastX := x, lastY := y
 MouseGetPos, x, y, win, ctrl
