@@ -3,8 +3,16 @@
 ;================================================
 GroupAdd, programs, ahk_exe chrome.exe
 GroupAdd, programs, ahk_exe Code.exe
-GroupAdd, programs, ahk_exe Anki.exe
+GroupAdd, programs, ahk_exe idea64.exe
+GroupAdd, programs, ahk_exe pycharm64.exe
 GroupAdd, programs, ahk_exe Hyper.exe
+GroupAdd, programs, ahk_exe Postman.exe
+GroupAdd, programs, ahk_exe Figma.exe
+GroupAdd, programs, ahk_exe Anki.exe
+GroupAdd, programs, ahk_exe Cold Turkey Blocker.exe
+GroupAdd, programs, ahk_exe Everything.exe
+GroupAdd, programs, ahk_exe ApplicationFrameHost.exe ; Windows 'Settings' panel
+GroupAdd, programs, ahk_exe Explorer.exe ; Windows 'Control Panel' & 'File Explorer'
 
 ;================================================
 ; COPY SCRIPT TO StartUp FOLDER FOR AUTORUNNING
@@ -26,11 +34,9 @@ tolerance = 100    ; Mouse distance to ignore in full screen
 Loop {
     WinWaitActive, ahk_group programs
     WinMaximize, A ; <-- Maximized by default (needed for certain programs like VSCode)
-    SoundBeep, 1500
     SetTimer, Check, 350
     WinWaitNotActive
     SetTimer, Check, Off
-    SoundBeep, 1000
 }
 
 Check:
