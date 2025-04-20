@@ -12,15 +12,15 @@ GroupAdd, programs, ahk_exe Hyper.exe
 FileCreateShortcut, %A_ScriptFullPath%, %A_Startup%\%A_ScriptName%.lnk, %A_ScriptDir%
 
 ;;; Note to myself: 
-; Letting everything go full-screen sounds like freedom, but ends in chaos. 
+; Making everything go full-screen sounds like freedom, but ends in chaos. 
 ; Keep a whitelist or use a smart filter — your sanity will thank you 😄
 
 #SingleInstance Force
 #InstallMouseHook
 Process, Priority,, B
 idle      = 1000 ; Milliseconds to wait before entering full screen
-margin    = 145   ; Screen boundaries for exiting full screen
-tolerance = 0    ; Mouse distance to ignore in full screen
+margin    = 45   ; Screen boundaries for exiting full screen
+tolerance = 100    ; Mouse distance to ignore in full screen
 
 
 Loop {
@@ -49,16 +49,17 @@ inMargin := y < margin || y > A_ScreenHeight - margin
 ; If we're inside the specified boundaries
 ; disable **entry** into fullscreen — but still allow **exit**
 if (!full && inMargin) {
-;    Tooltip, "In margin — blocking fullscreen"
+;    In margin — blocking fullscreen
+    Sleep, 10000 ; <--- for interacting with pinned extenstions
     return
 } 
 if (!full && !inMargin && A_TimeIdleMouse > idle) {
- ;   Tooltip, "Entering fullscreen"
+ ;  Entering fullscreen
     Send, {F11}
     return
 }
 if (full && inMargin && moved) {
-;    Tooltip, "Exiting fullscreen"
+;    Exiting fullscreen
     Send, {F11}
     return
 }
