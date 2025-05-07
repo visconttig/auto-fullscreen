@@ -11,13 +11,13 @@ GroupAdd, programs, ahk_exe Figma.exe
 GroupAdd, programs, ahk_exe Anki.exe
 GroupAdd, programs, ahk_exe Cold Turkey Blocker.exe
 GroupAdd, programs, ahk_exe Everything.exe
-GroupAdd, programs, ahk_exe ApplicationFrameHost.exe ; Windows 'Settings' panel
-GroupAdd, programs, ahk_exe Explorer.exe ; Windows 'Control Panel' & 'File Explorer'
+;GroupAdd, programs, ahk_exe ApplicationFrameHost.exe ; Windows 'Settings' panel
+;GroupAdd, programs, ahk_exe Explorer.exe ; Windows 'Control Panel' & 'File Explorer'
 
 ;================================================
 ; COPY SCRIPT TO StartUp FOLDER FOR AUTORUNNING
 ;================================================
-FileCreateShortcut, %A_ScriptFullPath%, %A_Startup%\%A_ScriptName%.lnk, %A_ScriptDir%
+; FileCreateShortcut, %A_ScriptFullPath%, %A_Startup%\%A_ScriptName%.lnk, %A_ScriptDir%
 
 ;;; Note to myself: 
 ; Making everything go full-screen sounds like freedom, but ends in chaos. 
@@ -44,6 +44,15 @@ CoordMode, Mouse
 lastX := x, lastY := y
 MouseGetPos, x, y, win, ctrl
 WinGetClass, winClass, ahk_id %win%
+
+; Block F11 if any modifier key is down
+if ( GetKeyState("Ctrl", "P") 
+    || GetKeyState("Alt", "P") 
+    || GetKeyState("Shift", "P") 
+    || GetKeyState("LWin", "P") 
+    || GetKeyState("RWin", "P") ) {
+      return
+  }
 
 
 
@@ -78,27 +87,28 @@ return
 ;================================================
 ~F11::Pause, Toggle
 return
-~F2::Pause, Toggle
+; for pausing without triggering full-screen
++F11::Pause, Toggle 
 return
 
 ;================================================
 ; Toggle Margin Overlay with F9
 ;================================================
-F9::
-toggleOverlay := !toggleOverlay
-if (toggleOverlay) {
-    ; Top Margin
-    Gui, MarginOverlay: +AlwaysOnTop -Caption +ToolWindow +E0x20
-    Gui, MarginOverlay:Color, Red
-    Gui, MarginOverlay:Show, x0 y0 w%A_ScreenWidth% h%margin%, TopBar
+; F9::
+; toggleOverlay := !toggleOverlay
+; if (toggleOverlay) {
+;     ; Top Margin
+;     Gui, MarginOverlay: +AlwaysOnTop -Caption +ToolWindow +E0x20
+;     Gui, MarginOverlay:Color, Red
+;     Gui, MarginOverlay:Show, x0 y0 w%A_ScreenWidth% h%margin%, TopBar
 
-    ; Bottom Margin (calculate y-position first)
-    bottomY := A_ScreenHeight - margin
-    Gui, MarginOverlayBottom: +AlwaysOnTop -Caption +ToolWindow +E0x20
-    Gui, MarginOverlayBottom:Color, Red
-    Gui, MarginOverlayBottom:Show, x0 y%bottomY% w%A_ScreenWidth% h%margin%, BottomBar
-} else {
-    Gui, MarginOverlay:Destroy
-    Gui, MarginOverlayBottom:Destroy
-}
-return
+;     ; Bottom Margin (calculate y-position first)
+;     bottomY := A_ScreenHeight - margin
+;     Gui, MarginOverlayBottom: +AlwaysOnTop -Caption +ToolWindow +E0x20
+;     Gui, MarginOverlayBottom:Color, Red
+;     Gui, MarginOverlayBottom:Show, x0 y%bottomY% w%A_ScreenWidth% h%margin%, BottomBar
+; } else {
+;     Gui, MarginOverlay:Destroy
+;     Gui, MarginOverlayBottom:Destroy
+; }
+; return
